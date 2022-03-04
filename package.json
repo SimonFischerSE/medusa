@@ -2,7 +2,7 @@
   "name": "root",
   "private": true,
   "workspaces": {
-    "packages":  [
+    "packages": [
       "packages/*"
     ],
     "nohoist": [
@@ -62,12 +62,14 @@
     "test": "jest",
     "prettier": "prettier",
     "test:integration": "jest --config=integration-tests/jest.config.js",
-    "test:fixtures": "jest --config=docs-util/jest.config.js --runInBand"
+    "test:fixtures": "jest --config=docs-util/jest.config.js --runInBand",
+    "generate": "openapi --input ./docs/api/store-spec3.yaml --output ./generated"
   },
   "dependencies": {
     "global": "^4.4.0",
     "import-from": "^3.0.0",
     "oas-normalize": "^5.0.1",
+    "openapi-typescript-codegen": "^0.20.0",
     "swagger-inline": "^3.2.2"
   },
   "resolutions": {

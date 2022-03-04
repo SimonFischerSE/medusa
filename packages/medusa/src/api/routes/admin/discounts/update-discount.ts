@@ -54,7 +54,7 @@ import { IsISO8601Duration } from "../../../../utils/validators/iso8601-duration
  *             type: array
  *             items:
  *               type: string
- *            metadata:
+ *           metadata:
  *              description: An object containing metadata of the discount
  *              type: object
  * tags:
