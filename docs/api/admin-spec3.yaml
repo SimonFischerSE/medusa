@@ -2612,8 +2612,12 @@ paths:
                   description: Billing address
                   anyOf:
                     - $ref: >-
-                        #/components/schemas/address shipping_address:
-                        description: Shipping address anyOf: - $ref:
+                        #/components/schemas/address
+                shipping_address:
+                  description: Shipping address
+                  anyOf:
+                    - $ref: >-
+                        #/components/schemas/address
                 items:
                   description: The Line Items for the order
                   type: array
@@ -3580,6 +3584,533 @@ paths:
                 properties:
                   types:
                     $ref: "#/components/schemas/product_tag"
+  "/regions/{id}/countries":
+    post:
+      operationId: PostRegionsRegionCountries
+      summary: Add Country
+      description: Adds a Country to the list of Countries in a Region
+      x-authenticated: true
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the Region.
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - country_code
+              properties:
+                country_code:
+                  description: The 2 character ISO code for the Country.
+                  type: string
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  region:
+                    $ref: "#/components/schemas/region"
+  "/regions/{id}/fulfillment-providers":
+    post:
+      operationId: PostRegionsRegionFulfillmentProviders
+      summary: Add Fulfillment Provider
+      description: Adds a Fulfillment Provider to a Region
+      x-authenticated: true
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the Region.
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            required:
+              - provider_id
+            schema:
+              properties:
+                provider_id:
+                  description: The id of the Fulfillment Provider to add.
+                  type: string
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  region:
+                    $ref: "#/components/schemas/region"
+  "/regions/{id}/payment-providers":
+    post:
+      operationId: PostRegionsRegionPaymentProviders
+      summary: Add Payment Provider
+      description: Adds a Payment Provider to a Region
+      x-authenticated: true
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the Region.
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            required:
+              - provider_id
+            schema:
+              properties:
+                provider_id:
+                  description: The id of the Payment Provider to add.
+                  type: string
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  region:
+                    $ref: "#/components/schemas/region"
+  /regions:
+    post:
+      operationId: PostRegions
+      summary: Create a Region
+      description: Creates a Region
+      x-authenticated: true
+      requestBody:
+        content:
+          application/json:
+            required:
+              - name
+              - currency_code
+              - tax_rate
+            schema:
+              properties:
+                name:
+                  description: The name of the Region
+                  type: string
+                currency_code:
+                  description: The 3 character ISO currency code to use for the Region.
+                  type: string
+                tax_code:
+                  description: An optional tax code the Region.
+                  type: string
+                tax_rate:
+                  description: The tax rate to use on Orders in the Region.
+                  type: number
+                payment_providers:
+                  description: >-
+                    A list of Payment Providers that should be enabled for the
+                    Region
+                  type: array
+                  items:
+                    type: string
+                fulfillment_providers:
+                  description: >-
+                    A list of Fulfillment Providers that should be enabled for
+                    the Region
+                  type: array
+                  items:
+                    type: string
+                countries:
+                  description: A list of countries that should be included in the Region.
+                  type: array
+                  items:
+                    type: string
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  region:
+                    $ref: "#/components/schemas/region"
+    get:
+      operationId: GetRegions
+      summary: List Regions
+      description: Retrieves a list of Regions.
+      x-authenticated: true
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: limit the number of regions in response
+        - in: query
+          name: offset
+          schema:
+            type: integer
+          required: false
+          description: Offset of regions in response (used for pagination)
+        - in: query
+          name: created_at
+          schema:
+            type: object
+          required: false
+          description: >-
+            Date comparison for when resulting region was created, i.e. less
+            than, greater than etc.
+        - in: query
+          name: updated_at
+          schema:
+            type: object
+          required: false
+          description: >-
+            Date comparison for when resulting region was updated, i.e. less
+            than, greater than etc.
+        - in: query
+          name: deleted_at
+          schema:
+            type: object
+          required: false
+          description: >-
+            Date comparison for when resulting region was deleted, i.e. less
+            than, greater than etc.
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  regions:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/region"
+  "/regions/{id}/metadata/{key}":
+    delete:
+      operationId: DeleteRegionsRegionMetadataKey
+      summary: Delete Metadata
+      description: Deletes a metadata key.
+      x-authenticated: true
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the Region.
+          schema:
+            type: string
+        - in: path
+          name: key
+          required: true
+          description: The metadata key.
+          schema:
+            type: string
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  region:
+                    $ref: "#/components/schemas/region"
+  "/regions/{id}":
+    delete:
+      operationId: DeleteRegionsRegion
+      summary: Delete a Region
+      description: Deletes a Region.
+      x-authenticated: true
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the Region.
+          schema:
+            type: string
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: string
+                    description: The id of the deleted Region.
+                  object:
+                    type: string
+                    description: The type of the object that was deleted.
+                  deleted:
+                    type: boolean
+    get:
+      operationId: GetRegionsRegion
+      summary: Retrieve a Region
+      description: Retrieves a Region.
+      x-authenticated: true
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the Region.
+          schema:
+            type: string
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  region:
+                    $ref: "#/components/schemas/region"
+    post:
+      operationId: PostRegionsRegion
+      summary: Update a Region
+      description: Updates a Region
+      x-authenticated: true
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the Region.
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  description: The name of the Region
+                  type: string
+                currency_code:
+                  description: The 3 character ISO currency code to use for the Region.
+                  type: string
+                automatic_taxes:
+                  description: >-
+                    If true Medusa will automatically calculate taxes for carts
+                    in this region. If false you have to manually call POST
+                    /carts/:id/taxes.
+                  type: boolean
+                gift_cards_taxable:
+                  description: >-
+                    Whether gift cards in this region should be applied sales
+                    tax when purchasing a gift card
+                  type: boolean
+                tax_provider_id:
+                  description: >-
+                    The id of the tax provider to use; if null the system tax
+                    provider is used
+                  type: string
+                tax_code:
+                  description: An optional tax code the Region.
+                  type: string
+                tax_rate:
+                  description: The tax rate to use on Orders in the Region.
+                  type: number
+                payment_providers:
+                  description: >-
+                    A list of Payment Providers that should be enabled for the
+                    Region
+                  type: array
+                  items:
+                    type: string
+                fulfillment_providers:
+                  description: >-
+                    A list of Fulfillment Providers that should be enabled for
+                    the Region
+                  type: array
+                  items:
+                    type: string
+                countries:
+                  description: A list of countries that should be included in the Region.
+                  type: array
+                  items:
+                    type: string
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  region:
+                    $ref: "#/components/schemas/region"
+  "/regions/{id}/fulfillment-options":
+    get:
+      operationId: GetRegionsRegionFulfillmentOptions
+      summary: List Fulfillment Options available in the Region
+      description: Gathers all the fulfillment options available to in the Region.
+      x-authenticated: true
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the Region.
+          schema:
+            type: string
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  fulfillment_options:
+                    type: array
+                    items:
+                      type: object
+  "/regions/{id}/countries/{country_code}":
+    delete:
+      operationId: PostRegionsRegionCountriesCountry
+      summary: Remove Country
+      x-authenticated: true
+      description: Removes a Country from the list of Countries in a Region
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the Region.
+          schema:
+            type: string
+        - in: path
+          name: country_code
+          required: true
+          description: The 2 character ISO code for the Country.
+          schema:
+            type: string
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  region:
+                    $ref: "#/components/schemas/region"
+  "/regions/{id}/fulfillment-providers/{provider_id}":
+    delete:
+      operationId: PostRegionsRegionFulfillmentProvidersProvider
+      summary: Remove Fulfillment Provider
+      description: Removes a Fulfillment Provider.
+      x-authenticated: true
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the Region.
+          schema:
+            type: string
+        - in: path
+          name: provider_id
+          required: true
+          description: The id of the Fulfillment Provider.
+          schema:
+            type: string
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  region:
+                    $ref: "#/components/schemas/region"
+  "/regions/{id}/payment-providers/{provider_id}":
+    delete:
+      operationId: PostRegionsRegionPaymentProvidersProvider
+      summary: Remove Payment Provider
+      description: Removes a Payment Provider.
+      x-authenticated: true
+      parameters:
+        - in: path
+          name: region_id
+          required: true
+          description: The id of the Region.
+          schema:
+            type: string
+        - in: path
+          name: provider_id
+          required: true
+          description: The id of the Payment Provider.
+          schema:
+            type: string
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  region:
+                    $ref: "#/components/schemas/region"
+  "/regions/{id}/metadata":
+    post:
+      operationId: PostRegionsRegionMetadata
+      summary: Set the metadata of a Region
+      description: Sets the metadata of a Region
+      x-authenticated: true
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The id of the Region.
+          schema:
+            type: string
+      tags:
+        - Region
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  region:
+                    $ref: "#/components/schemas/region"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - key
+                - value
+              properties:
+                key:
+                  type: string
+                  description: Key for the metadata value.
+                value:
+                  type: string
+                  description: The value that the key relates to.
   "/products/{id}/options":
     post:
       operationId: PostProductsProductOptions
@@ -4661,533 +5192,6 @@ paths:
                 properties:
                   product:
                     $ref: "#/components/schemas/product"
-  "/regions/{id}/countries":
-    post:
-      operationId: PostRegionsRegionCountries
-      summary: Add Country
-      description: Adds a Country to the list of Countries in a Region
-      x-authenticated: true
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: The id of the Region.
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              required:
-                - country_code
-              properties:
-                country_code:
-                  description: The 2 character ISO code for the Country.
-                  type: string
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  region:
-                    $ref: "#/components/schemas/region"
-  "/regions/{id}/fulfillment-providers":
-    post:
-      operationId: PostRegionsRegionFulfillmentProviders
-      summary: Add Fulfillment Provider
-      description: Adds a Fulfillment Provider to a Region
-      x-authenticated: true
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: The id of the Region.
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            required:
-              - provider_id
-            schema:
-              properties:
-                provider_id:
-                  description: The id of the Fulfillment Provider to add.
-                  type: string
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  region:
-                    $ref: "#/components/schemas/region"
-  "/regions/{id}/payment-providers":
-    post:
-      operationId: PostRegionsRegionPaymentProviders
-      summary: Add Payment Provider
-      description: Adds a Payment Provider to a Region
-      x-authenticated: true
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: The id of the Region.
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            required:
-              - provider_id
-            schema:
-              properties:
-                provider_id:
-                  description: The id of the Payment Provider to add.
-                  type: string
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  region:
-                    $ref: "#/components/schemas/region"
-  /regions:
-    post:
-      operationId: PostRegions
-      summary: Create a Region
-      description: Creates a Region
-      x-authenticated: true
-      requestBody:
-        content:
-          application/json:
-            required:
-              - name
-              - currency_code
-              - tax_rate
-            schema:
-              properties:
-                name:
-                  description: The name of the Region
-                  type: string
-                currency_code:
-                  description: The 3 character ISO currency code to use for the Region.
-                  type: string
-                tax_code:
-                  description: An optional tax code the Region.
-                  type: string
-                tax_rate:
-                  description: The tax rate to use on Orders in the Region.
-                  type: number
-                payment_providers:
-                  description: >-
-                    A list of Payment Providers that should be enabled for the
-                    Region
-                  type: array
-                  items:
-                    type: string
-                fulfillment_providers:
-                  description: >-
-                    A list of Fulfillment Providers that should be enabled for
-                    the Region
-                  type: array
-                  items:
-                    type: string
-                countries:
-                  description: A list of countries that should be included in the Region.
-                  type: array
-                  items:
-                    type: string
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  region:
-                    $ref: "#/components/schemas/region"
-    get:
-      operationId: GetRegions
-      summary: List Regions
-      description: Retrieves a list of Regions.
-      x-authenticated: true
-      parameters:
-        - in: query
-          name: limit
-          schema:
-            type: integer
-          required: false
-          description: limit the number of regions in response
-        - in: query
-          name: offset
-          schema:
-            type: integer
-          required: false
-          description: Offset of regions in response (used for pagination)
-        - in: query
-          name: created_at
-          schema:
-            type: object
-          required: false
-          description: >-
-            Date comparison for when resulting region was created, i.e. less
-            than, greater than etc.
-        - in: query
-          name: updated_at
-          schema:
-            type: object
-          required: false
-          description: >-
-            Date comparison for when resulting region was updated, i.e. less
-            than, greater than etc.
-        - in: query
-          name: deleted_at
-          schema:
-            type: object
-          required: false
-          description: >-
-            Date comparison for when resulting region was deleted, i.e. less
-            than, greater than etc.
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  regions:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/region"
-  "/regions/{id}/metadata/{key}":
-    delete:
-      operationId: DeleteRegionsRegionMetadataKey
-      summary: Delete Metadata
-      description: Deletes a metadata key.
-      x-authenticated: true
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: The id of the Region.
-          schema:
-            type: string
-        - in: path
-          name: key
-          required: true
-          description: The metadata key.
-          schema:
-            type: string
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  region:
-                    $ref: "#/components/schemas/region"
-  "/regions/{id}":
-    delete:
-      operationId: DeleteRegionsRegion
-      summary: Delete a Region
-      description: Deletes a Region.
-      x-authenticated: true
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: The id of the Region.
-          schema:
-            type: string
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  id:
-                    type: string
-                    description: The id of the deleted Region.
-                  object:
-                    type: string
-                    description: The type of the object that was deleted.
-                  deleted:
-                    type: boolean
-    get:
-      operationId: GetRegionsRegion
-      summary: Retrieve a Region
-      description: Retrieves a Region.
-      x-authenticated: true
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: The id of the Region.
-          schema:
-            type: string
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  region:
-                    $ref: "#/components/schemas/region"
-    post:
-      operationId: PostRegionsRegion
-      summary: Update a Region
-      description: Updates a Region
-      x-authenticated: true
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: The id of the Region.
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              properties:
-                name:
-                  description: The name of the Region
-                  type: string
-                currency_code:
-                  description: The 3 character ISO currency code to use for the Region.
-                  type: string
-                automatic_taxes:
-                  description: >-
-                    If true Medusa will automatically calculate taxes for carts
-                    in this region. If false you have to manually call POST
-                    /carts/:id/taxes.
-                  type: boolean
-                gift_cards_taxable:
-                  description: >-
-                    Whether gift cards in this region should be applied sales
-                    tax when purchasing a gift card
-                  type: boolean
-                tax_provider_id:
-                  description: >-
-                    The id of the tax provider to use; if null the system tax
-                    provider is used
-                  type: string
-                tax_code:
-                  description: An optional tax code the Region.
-                  type: string
-                tax_rate:
-                  description: The tax rate to use on Orders in the Region.
-                  type: number
-                payment_providers:
-                  description: >-
-                    A list of Payment Providers that should be enabled for the
-                    Region
-                  type: array
-                  items:
-                    type: string
-                fulfillment_providers:
-                  description: >-
-                    A list of Fulfillment Providers that should be enabled for
-                    the Region
-                  type: array
-                  items:
-                    type: string
-                countries:
-                  description: A list of countries that should be included in the Region.
-                  type: array
-                  items:
-                    type: string
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  region:
-                    $ref: "#/components/schemas/region"
-  "/regions/{id}/fulfillment-options":
-    get:
-      operationId: GetRegionsRegionFulfillmentOptions
-      summary: List Fulfillment Options available in the Region
-      description: Gathers all the fulfillment options available to in the Region.
-      x-authenticated: true
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: The id of the Region.
-          schema:
-            type: string
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  fulfillment_options:
-                    type: array
-                    items:
-                      type: object
-  "/regions/{id}/countries/{country_code}":
-    delete:
-      operationId: PostRegionsRegionCountriesCountry
-      summary: Remove Country
-      x-authenticated: true
-      description: Removes a Country from the list of Countries in a Region
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: The id of the Region.
-          schema:
-            type: string
-        - in: path
-          name: country_code
-          required: true
-          description: The 2 character ISO code for the Country.
-          schema:
-            type: string
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  region:
-                    $ref: "#/components/schemas/region"
-  "/regions/{id}/fulfillment-providers/{provider_id}":
-    delete:
-      operationId: PostRegionsRegionFulfillmentProvidersProvider
-      summary: Remove Fulfillment Provider
-      description: Removes a Fulfillment Provider.
-      x-authenticated: true
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: The id of the Region.
-          schema:
-            type: string
-        - in: path
-          name: provider_id
-          required: true
-          description: The id of the Fulfillment Provider.
-          schema:
-            type: string
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  region:
-                    $ref: "#/components/schemas/region"
-  "/regions/{id}/payment-providers/{provider_id}":
-    delete:
-      operationId: PostRegionsRegionPaymentProvidersProvider
-      summary: Remove Payment Provider
-      description: Removes a Payment Provider.
-      x-authenticated: true
-      parameters:
-        - in: path
-          name: region_id
-          required: true
-          description: The id of the Region.
-          schema:
-            type: string
-        - in: path
-          name: provider_id
-          required: true
-          description: The id of the Payment Provider.
-          schema:
-            type: string
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  region:
-                    $ref: "#/components/schemas/region"
-  "/regions/{id}/metadata":
-    post:
-      operationId: PostRegionsRegionMetadata
-      summary: Set the metadata of a Region
-      description: Sets the metadata of a Region
-      x-authenticated: true
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: The id of the Region.
-          schema:
-            type: string
-      tags:
-        - Region
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  region:
-                    $ref: "#/components/schemas/region"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - key
-                - value
-              properties:
-                key:
-                  type: string
-                  description: Key for the metadata value.
-                value:
-                  type: string
-                  description: The value that the key relates to.
   /return-reasons:
     post:
       operationId: PostReturnReasons
@@ -6275,6 +6279,41 @@ paths:
             application/json:
               schema:
                 properties: uploads
+  /variants:
+    get:
+      operationId: GetVariants
+      summary: List Product Variants.
+      description: Retrieves a list of Product Variants
+      x-authenticated: true
+      parameters:
+        - in: query
+          name: q
+          description: Query used for searching variants.
+          schema:
+            type: string
+        - in: query
+          name: offset
+          description: How many variants to skip in the result.
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: Limit the number of variants returned.
+          schema:
+            type: string
+      tags:
+        - Product Variant
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  variants:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/product_variant"
   /users:
     post:
       operationId: PostUsers
@@ -6391,7 +6430,6 @@ paths:
           application/json:
             schema:
               type: object
-              required: !<tag:yaml.org,2002:js/undefined> ""
               properties:
                 first_name:
                   type: string
@@ -6464,41 +6502,6 @@ paths:
                 properties:
                   user:
                     $ref: "#/components/schemas/user"
-  /variants:
-    get:
-      operationId: GetVariants
-      summary: List Product Variants.
-      description: Retrieves a list of Product Variants
-      x-authenticated: true
-      parameters:
-        - in: query
-          name: q
-          description: Query used for searching variants.
-          schema:
-            type: string
-        - in: query
-          name: offset
-          description: How many variants to skip in the result.
-          schema:
-            type: string
-        - in: query
-          name: limit
-          description: Limit the number of variants returned.
-          schema:
-            type: string
-      tags:
-        - Product Variant
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                properties:
-                  variants:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/product_variant"
 components:
   schemas:
     address:

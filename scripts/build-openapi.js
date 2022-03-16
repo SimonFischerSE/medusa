@@ -34,31 +34,31 @@ swaggerInline(
 })
 
 // Admin API
-// swaggerInline(
-//   ["./packages/medusa/src/models", "./packages/medusa/src/api/routes/admin"],
-//   {
-//     base: "./docs/api/admin-spec3-base.json",
-//   }
-// ).then((gen) => {
-//   const oas = new OAS(gen)
-//   oas
-//     .validate(true)
-//     .then(() => {
-//       fs.writeFileSync("./docs/api/admin-spec3.json", gen)
-//     })
-//     .catch((err) => {
-//       console.log("Error in admin")
-//       console.error(err)
-//       console.log(err.toString())
-//     })
-// })
+swaggerInline(
+  ["./packages/medusa/src/models", "./packages/medusa/src/api/routes/admin"],
+  {
+    base: "./docs/api/admin-spec3-base.json",
+  }
+).then((gen) => {
+  const oas = new OAS(gen)
+  oas
+    .validate(true)
+    .then(() => {
+      fs.writeFileSync("./docs/api/admin-spec3.json", gen)
+    })
+    .catch((err) => {
+      console.log("Error in admin")
+      console.error(err)
+      console.log(err.toString())
+    })
+})
 
-// swaggerInline(
-//   ["./packages/medusa/src/models", "./packages/medusa/src/api/routes/admin"],
-//   {
-//     base: "./docs/api/admin-spec3-base.json",
-//     format: "yaml",
-//   }
-// ).then((gen) => {
-//   fs.writeFileSync("./docs/api/admin-spec3.yaml", gen)
-// })
+swaggerInline(
+  ["./packages/medusa/src/models", "./packages/medusa/src/api/routes/admin"],
+  {
+    base: "./docs/api/admin-spec3-base.json",
+    format: "yaml",
+  }
+).then((gen) => {
+  fs.writeFileSync("./docs/api/admin-spec3.yaml", gen)
+})
